@@ -19,16 +19,11 @@ node () {
 			} 
  		} 
 	}
-
-	stage ('APP-IC - Post build actions') {
-/*
-Please note this is a direct conversion of post-build actions. 
-It may not necessarily work/behave in the same way as post-build actions work.
-A logic review is suggested.
-*/
-		// Mailer notification
-		step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'springdoc99@gmail.com', sendToIndividuals: false])
- 
+	
+	stage ('app-ic - Quality Analysis') {
+		withSonarQubeEnv('Sonar') {
+			bat 'mvn sonar:sonar'
+		}
 	}
 	
 	stage ('APP-IC - Deploy') {
@@ -41,5 +36,16 @@ A logic review is suggested.
 			} 
  		} 
 	}
+
+	stage ('APP-IC - Post build actions') {
+/*
+Please note this is a direct conversion of post-build actions. 
+It may not necessarily work/behave in the same way as post-build actions work.
+A logic review is suggested.
+*/
+		// Mailer notification
+		step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'springdoc99@gmail.com', sendToIndividuals: false])
+ 
+	}	
 }
 }
