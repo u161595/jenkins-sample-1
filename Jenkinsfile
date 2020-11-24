@@ -30,5 +30,16 @@ A logic review is suggested.
 		step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'springdoc99@gmail.com', sendToIndividuals: false])
  
 	}
+	
+	stage ('APP-IC - Deploy') {
+ 			// Maven build step
+	withMaven(maven: 'maven') { 
+ 			if(isUnix()) {
+ 				sh "mvn clean deploy " 
+			} else { 
+ 				bat "mvn clean deploy " 
+			} 
+ 		} 
+	}
 }
 }
